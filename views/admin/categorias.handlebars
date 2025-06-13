@@ -1,0 +1,63 @@
+<h2>Lista de categorias:</h2>
+<hr>
+<a href="/admin/categorias/add"><button class="btn btn-success">Nova categoria</button></a>
+
+<!-- Modal de confirmação -->
+<div class="modal fade" id="delete-cat" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Deletar categoria</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-left: auto;">
+            <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Tem certeza que deseja deletar esta categoria?
+      </div>
+      <div class="modal-footer">
+        <form action="/admin/categorias/delete" method="POST">
+          <input type="hidden" name="id" value="">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-danger">Deletar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{#each categorias}}
+  <div class="card mt-4">
+    <div class="card-body">
+      <h4>{{nome}}</h4>
+      <small>{{slug}}</small>
+      <h6>Data de criação: {{date}}</h6>
+      <a href="/admin/categorias/edit/{{_id}}"><button class="btn btn-link">Editar categoria</button></a>
+      <!-- Aqui adiciona o data-nome para passar o nome -->
+      <button class="btn btn-danger" data-toggle="modal" data-target="#delete-cat" data-id="{{_id}}" data-nome="{{nome}}">
+        Deletar categoria
+      </button>
+    </div>
+  </div>
+{{else}}
+  <div class="alert alert-warning mt-4" role="alert">
+    Você ainda não possui nenhuma categoria criada!
+  </div>
+{{/each}}
+
+<!-- Scripts do Bootstrap e jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Script para atualizar ID e nome no modal -->
+<script>
+  $('#delete-cat').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // Botão que abriu o modal
+    var id = button.data('id');
+    var nome = button.data('nome'); // Pega o nome da categoria
+
+    var modal = $(this);
+    modal.find('input[name="id"]').val(id);
+    modal.find('.modal-title').text('Deletar categoria: ' + nome); // Atualiza o título
+  });
+</script>
